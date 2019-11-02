@@ -1,6 +1,9 @@
 package com.example.bakingapp.Models;
 
-public class Steps {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Steps implements Parcelable {
 
 
         Integer  id;
@@ -8,7 +11,7 @@ public class Steps {
         String   description;
         String   videoURL;
         String   thumbnailURL;
-
+     public Steps(){}
     public Steps(Integer id, String shortDescription, String description, String videoURL, String thumbnailURL) {
         this.id = id;
         this.shortDescription = shortDescription;
@@ -16,6 +19,30 @@ public class Steps {
         this.videoURL = videoURL;
         this.thumbnailURL = thumbnailURL;
     }
+
+    protected Steps(Parcel in) {
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readInt();
+        }
+        shortDescription = in.readString();
+        description = in.readString();
+        videoURL = in.readString();
+        thumbnailURL = in.readString();
+    }
+
+    public static final Creator<Steps> CREATOR = new Creator<Steps>() {
+        @Override
+        public Steps createFromParcel(Parcel in) {
+            return new Steps(in);
+        }
+
+        @Override
+        public Steps[] newArray(int size) {
+            return new Steps[size];
+        }
+    };
 
     public Integer getId() {
         return id;
@@ -55,5 +82,24 @@ public class Steps {
 
     public void setThumbnailURL(String thumbnailURL) {
         this.thumbnailURL = thumbnailURL;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
+        }
+        dest.writeString(shortDescription);
+        dest.writeString(description);
+        dest.writeString(videoURL);
+        dest.writeString(thumbnailURL);
     }
 }

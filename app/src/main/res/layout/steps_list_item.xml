@@ -16,8 +16,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button"
+    <TextView
+        android:id="@+id/More_Details"
         android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -38,10 +38,10 @@ public class MealDetailsAdapter extends RecyclerView.Adapter<MealDetailsAdapter.
 
     @Override
     public int getItemViewType(int position) {
-          if(getIngredientsSize()!=0&&position<getIngredientsSize())
-              return 100;
-
-              return 200;
+          if((position<getIngredientsSize()))
+              return 10;
+else
+              return 20;
 
     }
     int getIngredientsSize()
@@ -63,13 +63,8 @@ public class MealDetailsAdapter extends RecyclerView.Adapter<MealDetailsAdapter.
     public MealDetailsViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
          boolean shouldAttachToParentImmediately = false;
-
-
-
-
         int layoutId;
-int sum=steps.size()+ingredients.size();
-if(viewType==100)
+ if(viewType==10)
 {
     layoutId = R.layout.ingredients_list_item;
 }
@@ -78,13 +73,8 @@ else
     layoutId = R.layout.steps_list_item;
 }
 
-
-
-
-
         View view = LayoutInflater.from(context).inflate(layoutId, viewGroup, shouldAttachToParentImmediately);
         view.setFocusable(true);
-
         return new MealDetailsViewHolder(view);
     }
 
@@ -97,7 +87,8 @@ else
 
     @Override
     public int getItemCount() {
-        return (getStepsSize()+getIngredientsSize());
+          int sum=getStepsSize()+getIngredientsSize();
+        return (sum);
     }
 
 
