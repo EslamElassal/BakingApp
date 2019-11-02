@@ -20,7 +20,7 @@ import java.util.List;
 
 public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHolder> {
      List<Meal>meals;
-     List<String>imagesUrls=new ArrayList<>();
+     public List<String>imagesUrls=new ArrayList<>();
      Context context;
      final private ListItemClickListener mOnClickListener;
 
