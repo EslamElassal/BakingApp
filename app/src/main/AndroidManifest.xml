@@ -12,7 +12,8 @@
         android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Actvities.VideoActivity"></activity>
+        <activity android:name=".Actvities.VideoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"></activity>
         <activity android:name=".Actvities.MealDetails" />
         <activity android:name=".Actvities.MainActivity">
             <intent-filter>

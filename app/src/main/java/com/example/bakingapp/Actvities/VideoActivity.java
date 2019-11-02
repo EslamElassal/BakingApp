@@ -1,5 +1,6 @@
 package com.example.bakingapp.Actvities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -38,51 +39,83 @@ public class VideoActivity extends AppCompatActivity {
     private TextView DescView,ShortDescView;
     private ImageButton NextBut,BackBut;
     String Desc,ShortDesc,VideoUrl,Title;
-    int ID,StepIndex,CurrentIndex;
+    int ID,StepIndex;
+    static int CurrentIndex=-1;
 
     ArrayList<Steps>steps;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
-        Intent intent = getIntent();
-        ID=intent.getIntExtra("id",0);
-        Desc=intent.getStringExtra("desc");
-        ShortDesc=intent.getStringExtra("shortdesc");
-        VideoUrl=intent.getStringExtra("video");
-        Title=intent.getStringExtra("title");
-        StepIndex=intent.getIntExtra("stepsindex",0);
-        steps=intent.getParcelableArrayListExtra("steps");
-        setTitle(Title);
-        DescView=(TextView)findViewById(R.id.Video_Activity_Desc);
-        ShortDescView=(TextView)findViewById(R.id.Video_Activity_Short_Desc);
         mPlayerView = (SimpleExoPlayerView) findViewById(R.id.playerView);
-        BackBut=(ImageButton)findViewById(R.id.Back);
-        NextBut=(ImageButton)findViewById(R.id.Next);
-        ShortDescView.setText(ShortDesc);
-        DescView.setText(Desc);
-        mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
-                (getResources(), R.drawable.icon));
 
-if(VideoUrl==null||VideoUrl.equals(""))
-{
-    mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
-            (getResources(), R.drawable.novideo));
-}
-    initializePlayer(Uri.parse(VideoUrl));
 
-NextBut.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        Next();
-    }
-});
-        BackBut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Back();
+        if(findViewById(R.id.videolayout).getTag().equals("land"))
+        {
+
+            setTitle(savedInstanceState.getString("videotitle"));
+            mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
+                    (getResources(), R.drawable.icon));
+            VideoUrl=savedInstanceState.getString("videourl");
+            if (VideoUrl == null || VideoUrl.equals("")) {
+                mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
+                        (getResources(), R.drawable.novideo));
             }
-        });
+            initializePlayer(Uri.parse(VideoUrl));
+
+        }else {
+            Intent intent = getIntent();
+            ID = intent.getIntExtra("id", 0);
+            steps = intent.getParcelableArrayListExtra("steps");
+            Title = intent.getStringExtra("title");
+
+if(CurrentIndex!=-1)
+{VideoUrl=steps.get(CurrentIndex).getVideoURL();
+    StepIndex=CurrentIndex;
+    Desc=steps.get(CurrentIndex).getDescription();
+    ShortDesc=steps.get(CurrentIndex).getShortDescription();
+}
+else
+{
+    VideoUrl = intent.getStringExtra("video");
+    StepIndex = intent.getIntExtra("stepsindex", 0);
+    Desc = intent.getStringExtra("desc");
+    ShortDesc = intent.getStringExtra("shortdesc");
+
+}
+
+
+            setTitle(Title);
+            DescView = (TextView) findViewById(R.id.Video_Activity_Desc);
+            ShortDescView = (TextView) findViewById(R.id.Video_Activity_Short_Desc);
+
+            BackBut = (ImageButton) findViewById(R.id.Back);
+            NextBut = (ImageButton) findViewById(R.id.Next);
+            ShortDescView.setText(ShortDesc);
+            DescView.setText(Desc);
+
+            mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
+                    (getResources(), R.drawable.icon));
+
+            if (VideoUrl == null || VideoUrl.equals("")) {
+                mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
+                        (getResources(), R.drawable.novideo));
+            }
+            initializePlayer(Uri.parse(VideoUrl));
+
+            NextBut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Next();
+                }
+            });
+            BackBut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Back();
+                }
+            });
+        }
     }
 
     private void initializePlayer(Uri mediaUri) {
@@ -127,10 +160,24 @@ String newVideoUrl=steps.get(index).getVideoURL();
             mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
                     (getResources(), R.drawable.novideo));
         }
-
-        initializePlayer(Uri.parse(newVideoUrl));
+VideoUrl=newVideoUrl;
+        initializePlayer(Uri.parse(VideoUrl));
 
     }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        if(!findViewById(R.id.videolayout).getTag().equals("land")) {
+            outState.putString("videourl", steps.get(StepIndex).getVideoURL());
+            outState.putString("videotitle", Title);
+            outState.putInt("videostepsindex", StepIndex);
+            outState.putString("desc", steps.get(StepIndex).getDescription());
+            outState.putString("shortdesc", steps.get(StepIndex).getShortDescription());
+        }
+
+        super.onSaveInstanceState(outState);
+    }
+
     void Back( )
     {
         if(StepIndex>0)
