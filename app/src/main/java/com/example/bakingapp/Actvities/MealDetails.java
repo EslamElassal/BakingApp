@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -47,7 +49,12 @@ public class MealDetails extends AppCompatActivity implements   MealDetailsAdapt
 
         mDetailsRecyclerView.setLayoutManager(layoutManagerIngredients);
         mDetailsRecyclerView.setHasFixedSize(true);
-
+//save Last Details Activity Meal Id and Image Url In SharedPreferences To get them in Widget
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.details_activity_image_url),Image );
+        editor.putInt(getString(R.string.details_activity_id),ID);
+        editor.commit();
 
         MealsData();
     }
