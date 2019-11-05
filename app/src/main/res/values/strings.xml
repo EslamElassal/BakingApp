@@ -2,6 +2,6 @@
     <string name="app_name">Baking App</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
-    <string name="details_activity_id">details_activity_id</string>
-    <string name="details_activity_image_url">details_activity_image_url</string>
+    <string name="details_activity_id">1</string>
+    <string name="details_activity_image_url">https://bakingamoment.com/wp-content/uploads/2015/03/4255featured2.jpg</string>
 </resources>

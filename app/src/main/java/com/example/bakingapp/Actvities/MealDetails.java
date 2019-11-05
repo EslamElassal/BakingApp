@@ -4,11 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -31,12 +33,14 @@ public class MealDetails extends AppCompatActivity implements   MealDetailsAdapt
      MealDetailsAdapter mDetailsAdapter;
     ImageView MealImage;
     List<Meal> mMeals=null;
+    public static Activity activity;
     int ID;
     String Image;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_details);
+        activity=this;
         Intent a = getIntent();
         ID=a.getIntExtra("id",0);
         Image=a.getStringExtra("image");
@@ -50,12 +54,21 @@ public class MealDetails extends AppCompatActivity implements   MealDetailsAdapt
         mDetailsRecyclerView.setLayoutManager(layoutManagerIngredients);
         mDetailsRecyclerView.setHasFixedSize(true);
 //save Last Details Activity Meal Id and Image Url In SharedPreferences To get them in Widget
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("eslam",MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("image",Image );
+        editor.putString("id",ID+"");
+        editor.commit();
+/*SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(getString(R.string.details_activity_image_url),Image );
-        editor.putInt(getString(R.string.details_activity_id),ID);
+        editor.putString(getString(R.string.details_activity_id),ID+"");
         editor.commit();
-
+*/
+/*        SharedPreferences sharedPrefs =  PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String imageUrl =  sharedPrefs.getString(getBaseContext().getString(R.string.details_activity_image_url),getBaseContext().getString(R.string.details_activity_image_url));
+        int id = Integer.parseInt( sharedPrefs.getString(getBaseContext().getString(R.string.details_activity_id),getBaseContext().getString(R.string.details_activity_id)));
+*/
         MealsData();
     }
     void MealsData()
@@ -102,6 +115,7 @@ public class MealDetails extends AppCompatActivity implements   MealDetailsAdapt
             return mMeals.get(ID-1).getSteps().size();
 
     }
+
     @Override
     public void onListItemClick(int item) {
         int size=getIngredientsSize();
