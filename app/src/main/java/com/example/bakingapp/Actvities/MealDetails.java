@@ -3,6 +3,7 @@ package com.example.bakingapp.Actvities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -12,6 +13,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.SystemClock;
@@ -49,8 +53,7 @@ public class MealDetails extends AppCompatActivity implements   MealDetailsAdapt
     int ID;
     String Image;
     private IngredientDatabase mDb;
-    static int IS_AUTOMATIC_WIDGET_UPATE_IS_FIRED=0;
-    @Override
+      @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_details);
@@ -76,7 +79,7 @@ public class MealDetails extends AppCompatActivity implements   MealDetailsAdapt
                         .into(MealImage);
             }
          }
-         mDetailsRecyclerView=(RecyclerView)findViewById(R.id.meal_details_ingredients_recyclerview);
+          mDetailsRecyclerView=(RecyclerView)findViewById(R.id.meal_details_ingredients_recyclerview);
          LinearLayoutManager layoutManagerIngredients = new LinearLayoutManager(this);
 
         mDetailsRecyclerView.setLayoutManager(layoutManagerIngredients);
@@ -101,22 +104,44 @@ public class MealDetails extends AppCompatActivity implements   MealDetailsAdapt
            });
 
                MyApp.saveSharedPrefrences("image",Image);
-               String ida=MyApp.getSharedPrefrences("id","5");
-               String xs=ida;
                MyApp.saveSharedPrefrences("id",ID+"");
-               String id=MyApp.getSharedPrefrences("id","5");
-               String x=id;
-               String xss=id;}
 
+               boolean connection = isNetworkAvailable();
+               if (connection) {
+                   MealsDataWithInsert();
+               }
+               else
+               {
+                   Toast.makeText(MealDetails.this,"No Intetnet Connection",Toast.LENGTH_LONG).show();
+               }
+
+
+
+
+                }
+
+           else
+                {
+                    boolean connection = isNetworkAvailable();
+                    if (connection) {
+                        MealsDataWithoutInsert();
+                    }
+                    else
+                    {
+                        Toast.makeText(MealDetails.this,"No Intetnet Connection",Toast.LENGTH_LONG).show();
+                    }
+
+
+           }
 
        }
 
+    }
+    public boolean isNetworkAvailable(){
 
-        MealsData();
-        IS_AUTOMATIC_WIDGET_UPATE_IS_FIRED=Integer.parseInt(MyApp.getSharedPrefrences("update",0+""));
-       if(IS_AUTOMATIC_WIDGET_UPATE_IS_FIRED==0){
-           StartAlaramManageToUpdateWiget();
-       }
+        ConnectivityManager connectivityManager=(ConnectivityManager) this.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
+        return networkInfo !=null;
     }
     void StartAlaramManageToUpdateWiget()
     {
@@ -127,10 +152,9 @@ public class MealDetails extends AppCompatActivity implements   MealDetailsAdapt
         alarm.cancel(pending);
         long interval = 1000*5;
         alarm.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(),interval, pending);
-        MyApp.saveSharedPrefrences("update",1+"");
 
     }
-    void MealsData()
+    void MealsDataWithInsert()
     {
 
         final Call<List<Meal>> meals= APIManager.getAPIS().getMeals();
@@ -174,12 +198,39 @@ public class MealDetails extends AppCompatActivity implements   MealDetailsAdapt
                         }
                     });
 
-
-
-
-
+                StartAlaramManageToUpdateWiget();
 
              }
+
+
+            @Override
+            public void onFailure(Call<List<Meal>> call, Throwable t) {
+
+                Log.e("Eslam","Failure");
+            }
+        });
+    }
+    void MealsDataWithoutInsert()
+    {
+
+        final Call<List<Meal>> meals= APIManager.getAPIS().getMeals();
+        meals.enqueue(new Callback<List<Meal>>() {
+            @Override
+            public void onResponse(Call<List<Meal>> call, Response<List<Meal>> response) {
+                if (!response.isSuccessful()) {
+
+
+                    Log.e("Eslam", response.toString());
+                    return;
+                }
+
+                mMeals=response.body();
+                setTitle(mMeals.get(ID-1).getName());
+                mDetailsAdapter = new MealDetailsAdapter(mMeals.get(ID-1).getIngredients(),mMeals.get(ID-1).getSteps(),MealDetails.this,MealDetails.this);
+                mDetailsRecyclerView.setAdapter(mDetailsAdapter);
+
+
+            }
 
 
             @Override

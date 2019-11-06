@@ -42,7 +42,7 @@ public class VideoActivity extends AppCompatActivity {
     int ID,StepIndex;
     static int CurrentIndex=-1;
     ArrayList<Steps>steps;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
