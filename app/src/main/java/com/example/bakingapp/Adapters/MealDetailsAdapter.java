@@ -18,8 +18,8 @@ import java.util.List;
 public class MealDetailsAdapter extends RecyclerView.Adapter<MealDetailsAdapter.MealDetailsViewHolder> {
      List<Ingredients>ingredients;
      List<Steps>steps;
-      Context context;
-
+     Context context;
+     private boolean StepTitleFlag=false;
 
     final private ListIngredientsItemClickListener mOnClickListener;
 
@@ -98,7 +98,8 @@ else
           TextView MealMeasure;
           TextView MealIngredient;
           TextView MeadDetailsStepsDescription;
-
+          TextView StepsTitle;
+          View     Corner;
         public MealDetailsViewHolder(View itemView) {
             super(itemView);
 
@@ -106,7 +107,8 @@ else
             MealMeasure = (TextView) itemView.findViewById(R.id.meal_details_measure);
             MealIngredient = (TextView) itemView.findViewById(R.id.meal_details_ingredient);
             MeadDetailsStepsDescription = (TextView) itemView.findViewById(R.id.meal_details_shortDescription);
-
+            StepsTitle = (TextView) itemView.findViewById(R.id.StepsTitle);
+            Corner=(View)itemView.findViewById(R.id.Corner);
             itemView.setOnClickListener(this);
          }
 
@@ -117,7 +119,14 @@ else
             { MealQuantity.setText(ingredients.get(listIndex).getQuantity()+"");
             MealMeasure.setText(ingredients.get(listIndex).getMeasure());
             MealIngredient.setText(ingredients.get(listIndex).getIngredient());}
+            else if(listIndex==getIngredientsSize()){
+                Corner.setVisibility(View.GONE);
+                StepsTitle.setVisibility(View.VISIBLE);
+                MeadDetailsStepsDescription.setText(steps.get(listIndex-getIngredientsSize()).getShortDescription());
+            }
             else {
+                Corner.setVisibility(View.VISIBLE);
+                StepsTitle.setVisibility(View.GONE);
                 MeadDetailsStepsDescription.setText(steps.get(listIndex-getIngredientsSize()).getShortDescription());
             }
 

@@ -52,37 +52,71 @@ public class VideoActivity extends AppCompatActivity {
 
         if(findViewById(R.id.videolayout).getTag().equals("land"))
         {
+if(savedInstanceState!=null) {
+    setTitle(savedInstanceState.getString("videotitle"));
+    mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
+            (getResources(), R.drawable.icon));
+    VideoUrl = savedInstanceState.getString("videourl");
+    if (VideoUrl == null || VideoUrl.equals("")) {
+        mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
+                (getResources(), R.drawable.novideo));
+    }
+    initializePlayer(Uri.parse(VideoUrl));
+}
+else
+{
+    //get from prev page as Land
+    Intent intent = getIntent();
+    ID = intent.getIntExtra("id", 0);
+    steps = intent.getParcelableArrayListExtra("steps");
+    Title = intent.getStringExtra("title");
 
-            setTitle(savedInstanceState.getString("videotitle"));
-            mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
-                    (getResources(), R.drawable.icon));
-            VideoUrl=savedInstanceState.getString("videourl");
-            if (VideoUrl == null || VideoUrl.equals("")) {
-                mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
-                        (getResources(), R.drawable.novideo));
-            }
-            initializePlayer(Uri.parse(VideoUrl));
+    if(CurrentIndex!=-1)
+    {VideoUrl=steps.get(CurrentIndex).getVideoURL();
+        StepIndex=CurrentIndex;
+        Desc=steps.get(CurrentIndex).getDescription();
+        ShortDesc=steps.get(CurrentIndex).getShortDescription();
+    }
+    else
+    {
+        VideoUrl = intent.getStringExtra("video");
+        StepIndex = intent.getIntExtra("stepsindex", 0);
+        Desc = intent.getStringExtra("desc");
+        ShortDesc = intent.getStringExtra("shortdesc");
 
-        }else {
+    }
+
+    setTitle(Title);
+    mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
+            (getResources(), R.drawable.icon));
+
+    if (VideoUrl == null || VideoUrl.equals("")) {
+        mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
+                (getResources(), R.drawable.novideo));
+    }
+    initializePlayer(Uri.parse(VideoUrl));
+
+}
+            }else {
             Intent intent = getIntent();
             ID = intent.getIntExtra("id", 0);
             steps = intent.getParcelableArrayListExtra("steps");
             Title = intent.getStringExtra("title");
 
-if(CurrentIndex!=-1)
-{VideoUrl=steps.get(CurrentIndex).getVideoURL();
-    StepIndex=CurrentIndex;
-    Desc=steps.get(CurrentIndex).getDescription();
-    ShortDesc=steps.get(CurrentIndex).getShortDescription();
-}
-else
-{
-    VideoUrl = intent.getStringExtra("video");
-    StepIndex = intent.getIntExtra("stepsindex", 0);
-    Desc = intent.getStringExtra("desc");
-    ShortDesc = intent.getStringExtra("shortdesc");
+            if(CurrentIndex!=-1)
+            {VideoUrl=steps.get(CurrentIndex).getVideoURL();
+                StepIndex=CurrentIndex;
+                Desc=steps.get(CurrentIndex).getDescription();
+                ShortDesc=steps.get(CurrentIndex).getShortDescription();
+            }
+            else
+            {
+                VideoUrl = intent.getStringExtra("video");
+                StepIndex = intent.getIntExtra("stepsindex", 0);
+                Desc = intent.getStringExtra("desc");
+                ShortDesc = intent.getStringExtra("shortdesc");
 
-}
+            }
 
 
             setTitle(Title);

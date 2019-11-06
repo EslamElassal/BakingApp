@@ -115,9 +115,6 @@ public class MealDetails extends AppCompatActivity implements   MealDetailsAdapt
                    Toast.makeText(MealDetails.this,"No Intetnet Connection",Toast.LENGTH_LONG).show();
                }
 
-
-
-
                 }
 
            else
@@ -130,7 +127,6 @@ public class MealDetails extends AppCompatActivity implements   MealDetailsAdapt
                     {
                         Toast.makeText(MealDetails.this,"No Intetnet Connection",Toast.LENGTH_LONG).show();
                     }
-
 
            }
 
