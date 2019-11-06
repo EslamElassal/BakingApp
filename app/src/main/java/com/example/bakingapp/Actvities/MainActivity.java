@@ -80,7 +80,8 @@ public class MainActivity extends AppCompatActivity implements MealsAdapter.List
                 Intent intent = new Intent(this,MealDetails.class);
                 intent.putExtra("id",mMeals.get(item).getId());
                 intent.putExtra("image",mAdapter.imagesUrls.get(item));
-                startActivity(intent);
+                intent.putExtra("activity","YES");
+                 startActivity(intent);
 
     }
 }
