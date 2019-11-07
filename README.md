@@ -7,7 +7,8 @@ the idea of the is from udacity Nanodegree course.
 i learnt about designing layouts and handle different screen sizes.
 i learnt about making Fragments and how many fragments interacts with each others.
 i learnt about making Widget for home screen.
-i have used external libraries like retrofit library to connect to TMDB API to get data and Picasso fro loading images. 
+i have used external libraries like retrofit library to connect to TMDB API to get data and Picasso fro loading images
+and ExoPlayer for Media Playback. 
 i have used  sqLite for storing data.
 i have used Room library for connecting with database.
 i have used Architecture Components like ViewMode and Livedate.
