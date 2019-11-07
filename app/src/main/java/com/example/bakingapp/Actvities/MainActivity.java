@@ -47,9 +47,6 @@ public class MainActivity extends AppCompatActivity implements MealsAdapter.List
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.SwipeRefreshLayoutMain);
         mRecyclerView =(RecyclerView)findViewById(R.id.meal_main_recyclerview);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setHasFixedSize(true);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -102,10 +99,9 @@ public class MainActivity extends AppCompatActivity implements MealsAdapter.List
                 mRecyclerView.setAdapter(mAdapter);
 
             }
-
-
             @Override
             public void onFailure(Call<List<Meal>> call, Throwable t) {
+                Toast.makeText(MainActivity.this,"Data Not Available On Server or Check Your Connection",Toast.LENGTH_LONG).show();
 
  Log.e("Eslam","Failure");
              }
@@ -114,11 +110,21 @@ public class MainActivity extends AppCompatActivity implements MealsAdapter.List
 
     @Override
     public void onListItemClick(int item) {
+        if(findViewById(R.id.SwipeRefreshLayoutMain).getTag().equals("MainActivityTabletTag"))
+        { Intent intent = new Intent(this,MealDetailsTablet.class);
+            intent.putExtra("id",mMeals.get(item).getId());
+            intent.putExtra("image",mAdapter.imagesUrls.get(item));
+            intent.putExtra("activity","YES");
+            startActivity(intent);
+
+        }
+        else{
                 Intent intent = new Intent(this,MealDetails.class);
                 intent.putExtra("id",mMeals.get(item).getId());
                 intent.putExtra("image",mAdapter.imagesUrls.get(item));
                 intent.putExtra("activity","YES");
                  startActivity(intent);
+        }
 
     }
 }

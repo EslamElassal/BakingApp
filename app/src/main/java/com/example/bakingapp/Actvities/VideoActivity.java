@@ -52,7 +52,7 @@ public class VideoActivity extends AppCompatActivity {
 
         if(findViewById(R.id.videolayout).getTag().equals("land"))
         {
-if(savedInstanceState!=null) {
+   if(savedInstanceState!=null) {
     setTitle(savedInstanceState.getString("videotitle"));
     mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
             (getResources(), R.drawable.icon));
@@ -175,8 +175,8 @@ else
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
         mExoPlayer.stop();
         mExoPlayer.release();
         mExoPlayer = null;

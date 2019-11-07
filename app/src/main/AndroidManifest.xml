@@ -3,16 +3,20 @@
     package="com.example.bakingapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
+        android:name=".MyApp"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:name=".MyApp"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Actvities.MealDetailsTablet"
+            android:screenOrientation="landscape"></activity>
+
         <receiver android:name=".Widget.MealWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -34,8 +38,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".Widget.MealService"
-            android:exported="false"></service>
+
+        <service
+            android:name=".Widget.MealService"
+            android:exported="false" />
     </application>
 
 </manifest>

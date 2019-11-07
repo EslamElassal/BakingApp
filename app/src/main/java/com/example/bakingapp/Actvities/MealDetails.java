@@ -34,8 +34,7 @@ import com.example.bakingapp.Models.Steps;
 import com.example.bakingapp.MyApp;
 import com.example.bakingapp.R;
 import com.example.bakingapp.Widget.MealService;
-import com.example.bakingapp.Widget.MealWidget;
-import com.squareup.picasso.Picasso;
+ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,16 +48,14 @@ public class MealDetails extends AppCompatActivity implements   MealDetailsAdapt
      MealDetailsAdapter mDetailsAdapter;
     ImageView MealImage;
     List<Meal> mMeals=null;
-    public static Activity activity;
-    int ID;
+     int ID;
     String Image;
     private IngredientDatabase mDb;
       @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_details);
-        activity=this;
-        MealImage = (ImageView) findViewById(R.id.meal_details_image);
+         MealImage = (ImageView) findViewById(R.id.meal_details_image);
         Intent a = getIntent();
          if(a.hasExtra("activity")){
             if((a.getStringExtra("activity")).equals("YES"))
@@ -80,10 +77,7 @@ public class MealDetails extends AppCompatActivity implements   MealDetailsAdapt
             }
          }
           mDetailsRecyclerView=(RecyclerView)findViewById(R.id.meal_details_ingredients_recyclerview);
-         LinearLayoutManager layoutManagerIngredients = new LinearLayoutManager(this);
 
-        mDetailsRecyclerView.setLayoutManager(layoutManagerIngredients);
-        mDetailsRecyclerView.setHasFixedSize(true);
 //save Last Details Activity Meal Id and Image Url In SharedPreferences To get them in Widget
 
         mDb = IngredientDatabase.getInstance(this);
@@ -188,7 +182,6 @@ public class MealDetails extends AppCompatActivity implements   MealDetailsAdapt
                             float Quantity=mMeals.get(ID-1).getIngredients().get(i).getQuantity();
                             int Id=ID-1;
                             IngredientEntry entry=new IngredientEntry(Id,Quantity,Measure,Ingredient);
-
                             mDb.IngredientDao().insertIngredient(entry);
                             }
                         }
@@ -201,6 +194,7 @@ public class MealDetails extends AppCompatActivity implements   MealDetailsAdapt
 
             @Override
             public void onFailure(Call<List<Meal>> call, Throwable t) {
+                Toast.makeText(MealDetails.this,"Data Not Available On Server or Check Your Connection",Toast.LENGTH_LONG).show();
 
                 Log.e("Eslam","Failure");
             }
@@ -231,6 +225,7 @@ public class MealDetails extends AppCompatActivity implements   MealDetailsAdapt
 
             @Override
             public void onFailure(Call<List<Meal>> call, Throwable t) {
+                Toast.makeText(MealDetails.this,"Data Not Available On Server or Check Your Connection",Toast.LENGTH_LONG).show();
 
                 Log.e("Eslam","Failure");
             }
@@ -254,8 +249,7 @@ public class MealDetails extends AppCompatActivity implements   MealDetailsAdapt
 
     @Override
     public void onListItemClick(int item) {
-        int size=getIngredientsSize();
-        if(item>=getIngredientsSize())
+         if(item>=getIngredientsSize())
         {
             Intent intent = new Intent(this,VideoActivity.class);
             intent.putExtra("id",ID);
